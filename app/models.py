@@ -1,3 +1,4 @@
+from django.core.validators import RegexValidator
 from django.db import models
 
 
@@ -9,6 +10,11 @@ class Category(models.Model):
 
 
 class Item(models.Model):
+    contact_number_validator = RegexValidator(
+        regex=r'^\+?1?\d{9,12}$',  # Customize the regex as per your phone number format
+        message='Enter a valid phone number.'
+    )
+
     class Type(models.TextChoices):
         LOST = 'LOST',
         FOUND = 'FOUND'
@@ -17,7 +23,7 @@ class Item(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField()
     contact_name = models.CharField(max_length=255)
-    contact_number = models.CharField(max_length=13)
+    contact_number = models.CharField(max_length=13, validators=[contact_number_validator])
     location = models.CharField(max_length=255)
     type = models.CharField(max_length=10,
                             choices=Type.choices,
