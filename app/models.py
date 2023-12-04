@@ -19,6 +19,9 @@ class Item(models.Model):
         LOST = 'LOST',
         FOUND = 'FOUND'
 
+    category = models.ForeignKey(
+        Category, on_delete=models.CASCADE
+    )
     image = models.ImageField(upload_to='item/')
     title = models.CharField(max_length=255)
     description = models.TextField()
@@ -31,5 +34,9 @@ class Item(models.Model):
                             default=Type.LOST)
     date = models.DateField(auto_now_add=True)
 
+    class Meta:
+        ordering = ['-date']
+
     def __str__(self):
-        return self.contact_name + self.contact_number
+        return f"{self.title} ({self.type}) - Contact: {self.contact_name} ({self.contact_number})"
+
